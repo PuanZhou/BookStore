@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace BulkyBookweb.Migrations
+namespace Bulkybook.DataAcess.Migrations
 {
-    public partial class AddCategoryToDatabase : Migration
+    public partial class newmigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
