@@ -6,7 +6,7 @@ namespace BulkyBook.Models
     public class Category
     {
         [Key]
-        public int id { get; set; }
+        public int Id { get; set; }
         [Required(ErrorMessage = "Please Enter Name")]
         public string Name { get; set; }
         [DisplayName("Display Order")]
