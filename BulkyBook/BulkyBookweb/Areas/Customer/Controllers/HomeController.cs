@@ -3,6 +3,7 @@ using BulkyBook.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace BulkyBookweb.Areas.Customer.Controllers
 {
@@ -24,16 +25,43 @@ namespace BulkyBookweb.Areas.Customer.Controllers
             return View(productList);
         }
 
-        public IActionResult Details(int? id)
+        public IActionResult Details(int productid)
         {
             ShoppingCart cartobj = new ShoppingCart()
             {
                 Count = 1,
-                Product = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == id, includeProperties: "Category,CoverType")
+                ProductId=productid,
+                Product = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == productid, includeProperties: "Category,CoverType")
             };
 
             return View(cartobj);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]//驗證是否為登入狀態
+        public IActionResult Details(ShoppingCart shoppingCart)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity; //目前登入的使用者資訊
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);//取得使用者的ID
+            shoppingCart.ApplicationUserId = claim.Value;//購物車的使用者ID=目前登入者的ID
+
+            ShoppingCart cartFromDb = _unitOfWork.ShoppingCart.GetFirstOrDefault(u => u.ApplicationUserId == claim.Value && u.ProductId == shoppingCart.ProductId);
+
+            if (cartFromDb == null)
+            {
+                _unitOfWork.ShoppingCart.Add(shoppingCart);
+            }
+            else
+            {
+                _unitOfWork.ShoppingCart.IncrementCount(cartFromDb, shoppingCart.Count);
+            }
+            
+            _unitOfWork.Save();
+
+            return RedirectToAction(nameof(Index));
+        }
+
 
         public IActionResult Privacy()
         {

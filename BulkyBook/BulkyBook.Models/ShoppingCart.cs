@@ -25,5 +25,8 @@ namespace BulkyBook.Models
         [ForeignKey("ApplicationUserId")]
         [ValidateNever]
         public ApplicationUser ApplicationUser { get; set; }
+        
+        [NotMapped] //不跟DB做ORM
+        public decimal Price { get; set; }
     }
 }

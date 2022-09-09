@@ -10,7 +10,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>options.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnection")
     ));
@@ -20,6 +19,15 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultTokenProvid
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSingleton<IEmailSender, EmailSender>();//註冊偽造的EmailSender
+builder.Services.AddRazorPages();
+//若未登入轉移到登入頁面
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = $"/Identity/Account/Login";
+    options.LogoutPath= $"/Identity/Account/Logout";
+    options.AccessDeniedPath= $"/Identity/Account/AccessDenied";
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

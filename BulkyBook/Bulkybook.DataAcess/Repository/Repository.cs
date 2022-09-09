@@ -27,14 +27,19 @@ namespace Bulkybook.DataAcess.Repository
             dbSet.Add(entity);
         }
         //includeProp-"Category,CoverType"
-        public IEnumerable<T> GetAll(string? includeProperties = null)
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null, string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
-            if(includeProperties != null)
+            if(filter != null)
             {
-                foreach(var inclideProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                query = query.Where(filter);
+            }
+         
+            if (includeProperties != null)
+            {
+                foreach (var inclideProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    query=query.Include(inclideProp);
+                    query = query.Include(inclideProp);
                 }
             }
             return query.ToList();
