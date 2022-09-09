@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 
 namespace BulkyBookweb.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -101,13 +102,14 @@ namespace BulkyBookweb.Areas.Admin.Controllers
                 if (obj.Product.Id == 0)
                 {
                     _unitOfWork.Product.Add(obj.Product);
+                    TempData["success"] = "Product Create successfully";
                 }
                 else
                 {
                     _unitOfWork.Product.Update(obj.Product);
+                    TempData["success"] = "Company Updated successfully";
                 }
                 _unitOfWork.Save();
-                TempData["success"] = "Product Create successfully";
                 return RedirectToAction("Index");
             }
             return View(obj);
