@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using BulkyBook.Utility;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>options.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnection")
     ));
+
+//取得appsettings.json中Stripe的密鑰Class的屬性名稱必須與Section中的名稱相同
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
 
 //將身分認證由默認改為自訂認證，必須啟用默認令牌
 builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultTokenProviders()
@@ -42,6 +46,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>(); //assign the global Api key inside pipeline
+
 app.UseAuthentication();//UseAuthentication位置一定要優先於UseAuthorization
 
 app.UseAuthorization();
