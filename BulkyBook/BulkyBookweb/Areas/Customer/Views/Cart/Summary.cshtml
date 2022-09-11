@@ -1,6 +1,8 @@
 ﻿@model BulkyBook.Models.ViewModels.ShoppingCartVM
 @using Microsoft.Extensions.Options
-@inject IOptions<BulkyBook.Utility.StripeSettings> Stripe
+@inject IOptions<BulkyBook.Utility.StripeSettings> Stripe  
+@*DI Stripe金鑰*@
+
 <form method="post">
     <br />
     <div class="container">
@@ -97,7 +99,7 @@
                                 }  
                                 <li class="list-group-item d-flex justify-content-between bg-light">
                                     <small class="text-info">Total (NT)</small>
-                                    <strong class="text-info">@Model.OrderHeader.OrderToal.ToString("c0")</strong>
+                                    <strong class="text-info">@Model.OrderHeader.OrderTotal.ToString("c0")</strong>
                                 </li>
                             </ul>
                         </div>
@@ -121,3 +123,8 @@
         </div>
     </div>
 </form>
+
+<br />
+<br />
+<br />
+<br />

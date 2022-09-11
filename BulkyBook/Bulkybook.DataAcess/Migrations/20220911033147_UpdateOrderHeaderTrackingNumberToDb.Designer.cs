@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bulkybook.DataAcess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220909113525_addOrderHeaderAndOrderDetailToDb")]
-    partial class addOrderHeaderAndOrderDetailToDb
+    [Migration("20220911033147_UpdateOrderHeaderTrackingNumberToDb")]
+    partial class UpdateOrderHeaderTrackingNumberToDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -190,6 +190,9 @@ namespace Bulkybook.DataAcess.Migrations
 
                     b.Property<string>("StreetAddress")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TrackingNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

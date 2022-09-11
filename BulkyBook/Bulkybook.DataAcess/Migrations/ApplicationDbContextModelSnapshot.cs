@@ -153,7 +153,7 @@ namespace Bulkybook.DataAcess.Migrations
                     b.Property<string>("OrderStatus")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("OrderToal")
+                    b.Property<decimal>("OrderTotal")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("PaymentDate")
@@ -188,6 +188,9 @@ namespace Bulkybook.DataAcess.Migrations
 
                     b.Property<string>("StreetAddress")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TrackingNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

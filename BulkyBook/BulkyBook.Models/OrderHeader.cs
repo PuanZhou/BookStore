@@ -22,9 +22,10 @@ namespace BulkyBook.Models
         [Required]
         public DateTime OrderDate { get; set; }
         public DateTime ShippingDate { get; set; }
-        public decimal OrderToal { get; set; }
+        public decimal OrderTotal { get; set; }
         public string? OrderStatus { get; set; }
         public string? PaymentStatus { get; set; }
+        public string? TrackingNumber { get; set; }
         public string? Carrier { get; set; }
         public DateTime PaymentDate { get; set; }
         public DateTime PaymentDueDate { get; set; }
