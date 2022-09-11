@@ -119,7 +119,7 @@ namespace BulkyBookweb.Areas.Identity.Pages.Account
             public int? CompanyId { get; set; }
             [ValidateNever]
             public IEnumerable<SelectListItem> RoleList { get; set; }
-            
+
             [ValidateNever]
             public IEnumerable<SelectListItem> CompanyList { get; set; }
         }
@@ -143,10 +143,10 @@ namespace BulkyBookweb.Areas.Identity.Pages.Account
                     Text = i,
                     Value = i
                 }),
-                CompanyList=_unitOfWork.Company.GetAll().Select(u=>new SelectListItem
+                CompanyList = _unitOfWork.Company.GetAll().Select(u => new SelectListItem
                 {
-                    Text=u.Name,
-                    Value=u.Id.ToString()
+                    Text = u.Name,
+                    Value = u.Id.ToString()
                 })
             };
         }
@@ -162,11 +162,11 @@ namespace BulkyBookweb.Areas.Identity.Pages.Account
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 user.StreetAddress = Input.StreetAddress;
-                user.City= Input.City;
-                user.State= Input.State;
-                user.PostalCode= Input.PostalCode;
-                user.Name= Input.Name;
-                user.PhoneNumber= Input.PhoneNumber;
+                user.City = Input.City;
+                user.State = Input.State;
+                user.PostalCode = Input.PostalCode;
+                user.Name = Input.Name;
+                user.PhoneNumber = Input.PhoneNumber;
                 if (Input.Role == SD.Role_User_Comp)
                 {
                     user.CompanyId = Input.CompanyId;
@@ -204,7 +204,14 @@ namespace BulkyBookweb.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        if (User.IsInRole(SD.Role_Admin))
+                        {
+                            TempData["success"] = "New User Created Successfully";
+                        }
+                        else
+                        {
+                            await _signInManager.SignInAsync(user, isPersistent: false);
+                        }
                         return LocalRedirect(returnUrl);
                     }
                 }

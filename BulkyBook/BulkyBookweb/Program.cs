@@ -24,6 +24,11 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultTokenProvid
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSingleton<IEmailSender, EmailSender>();//註冊偽造的EmailSender
 builder.Services.AddRazorPages();
+builder.Services.AddAuthentication().AddFacebook(options =>
+{
+    options.AppId = "1059669684751458";
+    options.AppSecret = "c1489eb6bfe8ecb078530f7103c07713";
+});
 //若未登入轉移到登入頁面
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -32,6 +37,15 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath= $"/Identity/Account/AccessDenied";
 });
 
+//開啟Session
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(100);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential= true;
+});
+////////////////
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -44,7 +58,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.UseSession();//Session
 app.UseRouting();
 
 StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>(); //assign the global Api key inside pipeline
