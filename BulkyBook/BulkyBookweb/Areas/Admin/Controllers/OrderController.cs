@@ -49,7 +49,7 @@ namespace BulkyBookweb.Areas.Admin.Controllers
             OrderVM.OrderHeader = _unitOfWork.OrderHeader.GetFirstOrDefault(u => u.Id == OrderVM.OrderHeader.Id, includeProperties: "ApplicationUser");
             OrderVM.OrderDetail = _unitOfWork.OrderDetail.GetAll(u => u.OrderId == OrderVM.OrderHeader.Id, includeProperties: "Product");
             //Stripe 支付
-            var domain = "https://localhost:44306/";
+            var domain = $"{Request.Scheme}://{Request.Host}/";
             var options = new SessionCreateOptions
             {
                 LineItems = new List<SessionLineItemOptions>(),

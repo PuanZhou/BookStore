@@ -132,7 +132,7 @@ namespace BulkyBookweb.Areas.Customer.Controllers
             if (applicationUser.CompanyId.GetValueOrDefault() == 0)
             {
                 //Stripe 支付
-                var domain = "https://localhost:44306/";
+                var domain = $"{Request.Scheme}://{Request.Host}/";
                 var options = new SessionCreateOptions
                 {
                     LineItems = new List<SessionLineItemOptions>(),
